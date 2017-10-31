@@ -8,41 +8,29 @@ import java.util.*;
 public class FullCountingSort {
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
-        List<Data> list = new ArrayList<Data>();
         int totalInputs = in.nextInt();
+        String helperArray[] = new String[totalInputs];
+        for (int i = 0; i < helperArray.length; i++) {
+            helperArray[i] = "";
+        };
+
+        int maxAccompanyingInteger = 0;
+
         for (int i = 0; i < totalInputs; i++) {
             int accompnyingInteger = in.nextInt();
             String word = in.next();
-            Data data = new Data(accompnyingInteger, word, i);
-            list.add(data);
-        }
-        Collections.sort(list, new DataComparator());
-        for(Data data : list)
-        {
-            if(data.initialPosition<totalInputs/2)
-                System.out.print("-");
+            if(i < totalInputs/2)
+                helperArray[accompnyingInteger] += "-";
             else
-                System.out.print(data.word);
-            System.out.print(" ");
+                helperArray[accompnyingInteger] += word;
+            helperArray[accompnyingInteger]+=" ";
+
+            if(maxAccompanyingInteger < accompnyingInteger)
+                maxAccompanyingInteger = accompnyingInteger;
         }
-    }
-}
-class Data {
-    public int accompanyingInteger;
-    public String word;
-    public int initialPosition;
 
-    public Data(int accompanyingInteger, String word, int initialPosition) {
-        this.accompanyingInteger = accompanyingInteger;
-        this.word = word;
-        this.initialPosition = initialPosition;
-    }
-
-}
-
-class DataComparator implements Comparator<Data>{
-
-    public int compare(Data o1, Data o2) {
-        return o1.accompanyingInteger-o2.accompanyingInteger;
+        for (int i = 0; i <= maxAccompanyingInteger ; i++) {
+            System.out.print(helperArray[i]);
+        }
     }
 }
