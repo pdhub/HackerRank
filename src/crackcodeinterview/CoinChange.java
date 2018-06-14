@@ -1,5 +1,7 @@
 package crackcodeinterview;
 
+import java.util.Arrays;
+
 public class CoinChange {
     public static void main(String[] args) {
         int[] coins = {1, 2, 5, 10};
@@ -8,27 +10,21 @@ public class CoinChange {
     }
 
     static int ways(int n, int[] coins) {
-        int[][] T = new int[coins.length + 1][n + 1];
-        // if amount=0 then just return empty set to make the change
-        for (int i = 0; i <= coins.length; i++) {
-            T[i][0] = 1;
-        }
-        // if no coins given, 0 ways to change the amount
-        for (int i = 0; i <= n; i++) {
-            T[0][i] = 0;
-        }
-        for (int i = 1; i <= coins.length; i++) {
-            for (int j = 1; j <= n; j++) {
-                if (j >= coins[i-1])
-                    // reduce the amount by coin value and
-                    // use the subproblem solution (amount-v[i]) and
-                    // add the solution from the top to it
-                    T[i][j] = T[i-1][j] + T[i][j-coins[i-1]];
-                else {
-                    T[i][j] = T[i-1][j];
-                }
-            }
-        }
-        return T[coins.length][n];
+        int[] table = new int[n+1];
+
+        // Initialize all table values as 0
+        Arrays.fill(table, 0);   //O(n)
+
+        // Base case (If given value is 0)
+        table[0] = 1;
+
+        // Pick all coins one by one and update the table[]
+        // values after the index greater than or equal to
+        // the value of the picked coin
+        for (int i=0; i<coins.length; i++)
+            for (int j=coins[i]; j<=n; j++)
+                table[j] += table[j-coins[i]];
+
+        return table[n];
     }
 }
